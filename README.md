@@ -1,7 +1,7 @@
 # fetch-cors-cookies
 
 :clapper:	: YouTube Video: [here](https://www.youtube.com/watch?v=34wC1C61lg0)<br>
-:floppy_disk: Self Signed Cert Script: [here](https://gist.github.com/AlexAtkinson/98efb3718e493abd263c32a0cd5032e6) - or just copy/paste the instructions below (:bulb: edit NAME).
+:floppy_disk: Self Signed Cert Script: [here](https://gist.github.com/AlexAtkinson/98efb3718e493abd263c32a0cd5032e6) - or just copy/paste the instructions below ( :bulb: edit NAME).
 
 ## Setup your CA & Self-Signed Certs
 
