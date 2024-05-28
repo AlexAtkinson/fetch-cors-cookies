@@ -1,9 +1,17 @@
 const express = require('express');
 const app = express();
+const https = require('https');
+const fs = require('fs');
 //const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const port = process.env.API_PORT || 5555;
+//const port = process.env.API_PORT || 5555;
+const port = 443;
 const path = require('path');
+
+const options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.crt'),
+}
 
 //handle json body request
 app.use(express.json());
@@ -29,12 +37,15 @@ app.get('/set', (req, res) => {
     maxAge: thirtyDays,
     path: '/',
     sameSite: 'None',
+    secure: 'secure',
+    domain: '.hell.com',
   });
   //secure needs to be set along with sameSite: 'None'. 'Lax' (default) will be there but unusable
 
   //CORS requires access-control-allow-origin... for fetch this needs an exact host match
   // CORS also needs access-control-allow-credentials if it is a fetch call with credentials: 'include'
-  res.set('Access-Control-Allow-Origin', req.headers.origin); //req.headers.origin
+  //res.set('Access-Control-Allow-Origin', req.headers.origin); //req.headers.origin
+  res.set('Access-Control-Allow-Origin', req.header('host')); //req.headers.origin
   res.set('Access-Control-Allow-Credentials', 'true');
   // access-control-expose-headers allows JS in the browser to see headers other than the default 7
   res.set(
@@ -56,7 +67,13 @@ app.get('/delete/:key', (req, res) => {
   res.set('Access-Control-Allow-Origin', req.headers.origin);
   res.set('Access-Control-Allow-Credentials', 'true');
   res.set('Access-Control-Expose-Headers', 'date, etag');
-  res.cookie(key, '', { maxAge: 0, path: '/', sameSite: 'None' });
+  res.cookie(key, '', {
+    maxAge: 0,
+    path: '/',
+    sameSite: 'None',
+    secure: 'secure',
+    domain: '.hell.com',
+  });
   res.send({
     message: `${key} cookie set to expire immediately`,
   });
@@ -86,10 +103,23 @@ app.get('/:name', (req, res) => {
   });
 });
 
-app.listen(port, function (err) {
+
+
+const server = https.createServer(options, app);
+
+server.listen(port, function (err) {
   if (err) {
     console.error('Failure to launch server');
     return;
-  }
-  console.log(`Listening on port ${port}`);
+  };
+  console.log('Server is running on port 443');
 });
+
+
+// app.listen(port, function (err) {
+//   if (err) {
+//     console.error('Failure to launch server');
+//     return;
+//   }
+//   console.log(`Listening on port ${port}`);
+// });

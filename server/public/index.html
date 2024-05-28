@@ -30,7 +30,9 @@
     </main>
     <script>
       //const baseURL = 'http://127.0.0.1:5555'; // same-site
-      const baseURL = 'http://localhost:5555'; // cross-site CORS
+      //const baseURL = 'http://localhost:5555'; // cross-site CORS
+      //const baseURL = 'https://hell.com'; // cross-site CORS
+      const baseURL = window.location.origin
 
       document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btnAdd').addEventListener('click', fAdd);
@@ -80,14 +82,14 @@
           (Math.floor(Math.random() * 123456) + 123456).toString()
         );
         let thirty = 60 * 60 * 24 * 30;
-        document.cookie = `${key}=${value};path=/;max-age=${thirty};`; // one cookie at a time
+        document.cookie = `${key}=${value};path=/;max-age=${thirty};sameSite=None;secure=secure;domain=.hell.com;`; // one cookie at a time
         document.getElementById('output').textContent = document.cookie;
         /**
         ;path= absolute path. current path by default.
         ;domain=sub.example.com current domain by default.
         ;max-age= seconds  60*60*24*30  30 days
-        ;expires= UTC date. end of current session by default  
-        ;secure=true 
+        ;expires= UTC date. end of current session by default
+        ;secure=true
         ;same-site=Strict | Lax
         **/
       }
@@ -126,7 +128,7 @@
       function fDelLocal(ev) {
         let key = 'token';
         let value = '';
-        document.cookie = `${key}=${value};path=/;expires=0;`;
+        document.cookie = `${key}=${value};path=/;max-age=0;sameSite=None;secure=secure;domain=.hell.com;`;
         document.getElementById('output').textContent = document.cookie;
         //delete the token cookie associated with the current domain
       }
